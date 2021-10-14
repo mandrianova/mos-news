@@ -1,2 +1,10 @@
 /.idea
 /.virtualenvs
+/venv
+/private
+__pycache__
+*/__pycache__
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+tags
