@@ -65,3 +65,30 @@ news_ids_from_json = set([i.get('id') for i in data])
 df_json = pd.read_json('news.json', encoding="utf_8_sig")  # Закинем json в df
 df_json["news_type"] = df_json['id'].apply(get_news_type)
 df_json["news_type"].value_counts()
+
+with open('districts.json', "r", encoding="utf_8_sig") as file:
+    data_districts = json.loads(file.read())
+
+districts = list()
+for a in data_districts["items"]:
+    for d in a['areas']:
+        d['area_title'] = a['title']
+        d['area_local_id'] = a['local_id']
+        districts.append(d)
+    if not a['areas']:
+        districts.append({
+            "id": a['id'],
+            "title": a['title'],
+            "local_id": a['local_id'],
+            "district_id": None,
+            "site": None,
+            "population": None,
+            "square": None,
+            "manager_id": None,
+            "title_en": a['title_en'],
+            'area_title': a['title'],
+            'area_local_id': a['local_id']
+        })
+
+districts_df = pd.DataFrame(districts)
+
