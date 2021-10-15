@@ -82,7 +82,7 @@ def get_corpus():
     corpus = []
     for one_news in news:
         if 'full_text' in one_news:
-            full_txt = get_text_on_pattern_replacement_func(patterns_to_replace, one_news['full_text'])
+            full_txt = get_text_on_pattern_replacement_func(one_news['full_text'])
             lst_of_tokens_without_stopwords = get_lst_of_normalized_tokens_without_stopwords(text=full_txt,
                                                                                              is_normalize=True)
             corpus.append(list(set(lst_of_tokens_without_stopwords)))
@@ -90,7 +90,7 @@ def get_corpus():
 
 
 def compute_tf(text):
-    txt = get_text_on_pattern_replacement_func(patterns_to_replace, text)
+    txt = get_text_on_pattern_replacement_func(text)
     tokens_without_stopwords = get_lst_of_normalized_tokens_without_stopwords(txt)
     count_of_words = Counter(tokens_without_stopwords)
     for key in count_of_words:
