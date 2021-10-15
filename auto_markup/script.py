@@ -37,18 +37,17 @@ with urllib.request.urlopen(
         "https://www.mos.ru/api/newsfeed/v4/frontend/json/ru/spheres?fields=id%2Ctitle&per-page=50&page=2") as url:
     spheres_json2 = json.loads(url.read().decode())
 
-# очитска full_text
-patterns_to_replace = {
-    '&nbsp;': ' ',  # замена пробела(&nbsp;) на пробел
-    '<.+?>|\\n|&[a-z]+;': '',  # замена всех тэгов, /n и выражений типа &ldquo; на пустую строку
-    '\s+': ' ',  # замена всех повторяющихся пробелов на один
-    '(.\.)(\S)': '\g<1> \g<2>',
-    # добавление пробела после конца предложения, если дальше нет пробела и начинается буква
-    '\s+$': '',  # удаление пробелов с конца строки
-}
 
+def get_text_on_pattern_replacement_func(html_text: str) -> str:
+    patterns_to_replace = {
+        '&nbsp;': ' ',  # замена пробела(&nbsp;) на пробел
+        '<.+?>|\\n|&[a-z]+;': '',  # замена всех тэгов, /n и выражений типа &ldquo; на пустую строку
+        '\s+': ' ',  # замена всех повторяющихся пробелов на один
+        '(.\.)(\S)': '\g<1> \g<2>',
+        # добавление пробела после конца предложения, если дальше нет пробела и начинается буква
+        '\s+$': '',  # удаление пробелов с конца строки
+    }
 
-def get_text_on_pattern_replacement_func(patterns_to_replace: dict, html_text: str) -> str:
     for pattern, repl in patterns_to_replace.items():
         html_text = re.sub(pattern, repl, html_text)
         return html_text
