@@ -17,3 +17,12 @@ The repo is about to be born soon... In-depth description will be provided by ne
 4. Push get / post
 5. Repeat
 6. Good evening
+
+#### Start with docker-compose
+
+- Command for jupyter:
+```docker-compose up jupyter``` 
+Use host and port http://127.0.0.1:8089/
+- Command for web-service:
+```docker-compose up web```
+Use host and port http://127.0.0.1:8090/
