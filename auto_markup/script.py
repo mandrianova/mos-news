@@ -19,10 +19,10 @@ STOP_WORDS += STOP_WORDS_MONTHS
 
 morph = pymorphy2.MorphAnalyzer()
 
-path_to_folder = 'C:\\Users\\mrrax\\projects\\mos-news'
-source_xlsx = os.path.join(path_to_folder, 'dataset_news_1.xlsx')
-source_json = os.path.join(path_to_folder, 'news.json')
-source_districts_json = os.path.join(path_to_folder, 'districts.json')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+source_xlsx = os.path.join(BASE_DIR, 'data/dataset_news_1.xlsx')
+source_json = os.path.join(BASE_DIR, 'data/news.json')
+source_districts_json = os.path.join(BASE_DIR, 'data/districts.json')
 
 with open(source_json, "r", encoding="utf_8_sig") as news_json:
     news = json.loads(news_json.read())

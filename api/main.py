@@ -17,7 +17,7 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
-
+#TODO: поразмышлять на тему роутов / подчеркивание или слэш
 @app.get("/history_news/{id}", response_model=TheNewsOut, tags=["history"])
 def show_history(id: int):
     """test route to get history news from news.json accessed by index"""

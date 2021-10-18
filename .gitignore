@@ -8,3 +8,5 @@ __pycache__
 *.sublime-project
 *.sublime-workspace
 tags
+*/*.ipynb_checkpoints
+*.ipynb_checkpoints
