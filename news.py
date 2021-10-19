@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-with open('news.json', "r", encoding="utf_8_sig") as news_json:
+with open('data/news.json', "r", encoding="utf_8_sig") as news_json:
     data = json.loads(news_json.read())
 
 news_types = set()
@@ -16,7 +16,7 @@ print(news_types)
 какие вообще нам выдали типы, так как есть еще другие.
 """
 
-df = pd.read_excel('dataset_news_1.xlsx')
+df = pd.read_excel('data/dataset_news_1.xlsx')
 
 
 def get_news_id_from_url(url: str) -> int:
@@ -62,11 +62,11 @@ news_ids_from_json = set([i.get('id') for i in data])
 
 # Тут можно посравнивать два сета и увидеть разницу в списке id
 
-df_json = pd.read_json('news.json', encoding="utf_8_sig")  # Закинем json в df
+df_json = pd.read_json('data/news.json', encoding="utf_8_sig")  # Закинем json в df
 df_json["news_type"] = df_json['id'].apply(get_news_type)
 df_json["news_type"].value_counts()
 
-with open('districts.json', "r", encoding="utf_8_sig") as file:
+with open('data/districts.json', "r", encoding="utf_8_sig") as file:
     data_districts = json.loads(file.read())
 
 districts = list()
