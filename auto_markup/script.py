@@ -105,6 +105,7 @@ def get_named_objects_without_stopwords(text):
 lst_of_tags_objects = tags_json['tags']
 # set of tags
 set_of_tags = set([tag['title'] for tag in lst_of_tags_objects])
+normalized_set_of_tags = [morph.normal_forms(x)[0] for x in set_of_tags if len(x.split()) == 1]
 
 # spheres lst of dicts(objects)
 all_spheres_lst_of_objects = spheres_json1['items'] + spheres_json2['items']
