@@ -26,4 +26,5 @@ tqdm==4.62.3
 typing-extensions==3.10.0.2
 uvicorn==0.15.0
 jupyter
+matplotlib
 
