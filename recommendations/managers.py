@@ -1,20 +1,13 @@
 import os
 import json
 from datetime import datetime
-from . models import TheNewsIn, TheNewsOut
+
+from auto_markup.model import get_result_tag_and_spheres_for_title_preview_fulltext
+from . schemas import TheNewsIn, TheNewsOut
 import pandas as pd
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def get_markups(body: TheNewsIn):
-    # здесь будет произведена генерация разметки согласно выбранному алгоритму
-    with open(os.path.join(BASE_DIR, "news.json"), "r") as file:
-        data = json.load(file)
-    print(data[:3])
-    result = data[0]
-    return result
 
 
 def get_recommendations(user_id: int):

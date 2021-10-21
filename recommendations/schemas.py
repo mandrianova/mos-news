@@ -37,6 +37,7 @@ class Theme(BaseModel):
     icon_id: int
     url: str
 
+
 class Image(BaseModel):
     id: int
     title: str

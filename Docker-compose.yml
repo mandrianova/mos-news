@@ -6,7 +6,7 @@ services:
       - .:/app
     ports:
       - "8090:8090"
-    command: uvicorn api.main:app --reload --port 8090 --host 0.0.0.0
+    command: uvicorn main:app --reload --port 8090 --host 0.0.0.0
   jupyter:
     build: .
     volumes:
