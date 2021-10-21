@@ -35,8 +35,8 @@ def generate_markups(body: TheNewsIn):
 
 @app.post("/recommendations/{user_id}", tags=["recommendations"])
 def generate_recommendations(user_id: int):
-    recommendations = get_recommendations(user_id)
-    return {"recommendations": recommendations}
+    recommendations, history = get_recommendations(user_id)
+    return {"recommendations": recommendations, "history": history}
 
 
 @app.post("/news/create", response_model=TheNewsOut)
