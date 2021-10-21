@@ -1,17 +1,18 @@
 import os
 import pymorphy2
-from api.main import BASE_DIR
 import urllib.request
 import json
 import pickle
 
-from auto_markup.support_decorators import measure_exectime, try_except_none_wrapper
-from auto_markup.text_manipulation import get_text_on_pattern_replacement_func, \
+from auto_markup.support_for_model.support_decorators import measure_exectime, try_except_none_wrapper
+from auto_markup.support_for_model.text_manipulation import get_text_on_pattern_replacement_func, \
     get_lst_of_normalized_tokens_without_stopwords
 
 morph = pymorphy2.MorphAnalyzer()
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 path_to_data_folder = os.path.join(BASE_DIR, 'data')
+
 source_xlsx = os.path.join(path_to_data_folder, 'dataset_news_1.xlsx')
 source_json = os.path.join(path_to_data_folder, 'news.json')
 source_districts_json = os.path.join(path_to_data_folder, 'districts.json')
@@ -216,3 +217,4 @@ def save_all_files():
     save_corpus()
     news = get_news()
     save_dict_normalized_tag_spheres(news=news)
+    return True

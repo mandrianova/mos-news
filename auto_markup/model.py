@@ -1,8 +1,8 @@
-from auto_markup.support_decorators import measure_exectime
-from auto_markup.text_manipulation import get_text_on_pattern_replacement_func, \
+from auto_markup.support_for_model.support_decorators import measure_exectime
+from auto_markup.support_for_model.text_manipulation import get_text_on_pattern_replacement_func, \
     get_lst_of_normalized_tokens_without_stopwords, STOP_WORDS
-from auto_markup.work_with_files import get_corpus, get_normalized_set_of_tags, get_news,\
-    get_dict_normalized_tag_spheres
+from auto_markup.support_for_model.work_with_files import get_corpus, get_normalized_set_of_tags, get_news, \
+    get_dict_normalized_tag_spheres, save_all_files
 from collections import Counter
 import math
 from natasha import (
@@ -70,7 +70,7 @@ def match_weight_with_exist_tag(word, tags, weight_with_exist_tag=WEIGHT_EXIST_T
 
 
 @measure_exectime
-def get_result_tag_and_spheres_for_title_preview_fulltext(title, preview, full_txt):
+def get_result_tag_and_spheres_for_title_preview_fulltext(*, title, preview, full_txt):
     corpus = get_corpus()
     if corpus is None:
         return None
@@ -92,9 +92,6 @@ def get_result_tag_and_spheres_for_title_preview_fulltext(title, preview, full_t
     for tag in all_tags:
         if tag in dict_normalized_tag_spheres:
             set_of_spheres.update(dict_normalized_tag_spheres[tag])
-    # print('RESULT TAGS to ordinary: \n', ordinary_tags)
-    # print('RESULT TAGS to named objects: \n', named_objects_without_stopwords)
-    # print('RESULT SPHERES: \n', set_of_spheres)
     return list(all_tags), list(set_of_spheres)
 
 
@@ -103,8 +100,21 @@ def check_function(number_of_news):
     title = news[number_of_news]['title']
     preview_text = news[number_of_news]['preview_text']
     full_text = news[number_of_news]['full_text']
-    tags, set_of_spheres = get_result_tag_and_spheres_for_title_preview_fulltext(title, preview_text, full_text)
+    tags, set_of_spheres = get_result_tag_and_spheres_for_title_preview_fulltext(
+        title=title,
+        preview_text=preview_text,
+        full_txt=full_text
+    )
     print('RESULT TAGS: \n', tags)
     print('RESULT SPHERES: \n', set_of_spheres)
     print('REAL TAGS: \n', [tag_object['title'] for tag_object in news[number_of_news]['tags']])
     print('REAL SPHERES: \n', [sphere_object['title'] for sphere_object in news[number_of_news]['spheres']])
+
+
+def update_model_func():
+    try:
+        save_all_files()
+        return True
+    except Exception as ex:
+        print(ex)
+        return None

@@ -7,6 +7,8 @@ STOP_WORDS = stopwords.words("russian")
 STOP_WORDS_MONTHS = ['сентябрь', 'октябрь', 'ноябрь', 'декабрь', 'январь', 'февраль', 'март', 'апрель', 'март', 'май',
                      'июнь', 'июль', 'август']
 STOP_WORDS += STOP_WORDS_MONTHS
+STOP_WORDS = set(STOP_WORDS)
+
 morph = pymorphy2.MorphAnalyzer()
 
 
@@ -36,3 +38,5 @@ def get_lst_of_normalized_tokens_without_stopwords(text, is_normalize=IS_NORMALI
         return [x for x in first_filter if x not in STOP_WORDS]
 
     return tokens
+
+# текст сразу?
