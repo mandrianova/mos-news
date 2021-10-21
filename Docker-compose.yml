@@ -14,3 +14,10 @@ services:
     ports:
       - "8089:8089"
     command: bash -c "cd /app & jupyter notebook --no-browser --port 8089 --allow-root --ip 0.0.0.0"
+  prod:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "80:80"
+    command: uvicorn main:app --reload --port 80 --host 0.0.0.0
