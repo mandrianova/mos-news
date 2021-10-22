@@ -127,7 +127,7 @@ with open('data/history.json', 'w', encoding='utf-8') as f:
 #
 # # Тут можно посравнивать два сета и увидеть разницу в списке id
 #
-# df_json = pd.read_json('data/save_history.json', encoding="utf_8_sig")  # Закинем json в df
+# df_json = pd.read_json('data/news.json', encoding="utf_8_sig")  # Закинем json в df
 # df_json["news_type"] = df_json['id'].apply(get_news_type)
 # df_json["news_type"].value_counts()
 

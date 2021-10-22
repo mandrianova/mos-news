@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 path_to_data_folder = os.path.join(BASE_DIR, 'data')
 
 source_xlsx = os.path.join(path_to_data_folder, 'dataset_news_1.xlsx')
-source_json = os.path.join(path_to_data_folder, 'save_history.json')
+source_json = os.path.join(path_to_data_folder, 'news.json')
 source_districts_json = os.path.join(path_to_data_folder, 'districts.json')
 source_corpus = os.path.join(path_to_data_folder, 'data_auto_markup', 'corpus.pickle')
 source_set_of_tags = os.path.join(path_to_data_folder, 'data_auto_markup', 'tags.pickle')
