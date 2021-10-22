@@ -27,4 +27,4 @@ typing-extensions==3.10.0.2
 uvicorn==0.15.0
 jupyter
 matplotlib
-
+natasha==1.4

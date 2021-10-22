@@ -3,6 +3,8 @@ from nltk.corpus import stopwords
 import pymorphy2
 
 IS_NORMALIZE = True
+import nltk
+nltk.download('stopwords')
 STOP_WORDS = stopwords.words("russian")
 STOP_WORDS_MONTHS = ['сентябрь', 'октябрь', 'ноябрь', 'декабрь', 'январь', 'февраль', 'март', 'апрель', 'март', 'май',
                      'июнь', 'июль', 'август']
