@@ -28,3 +28,5 @@ uvicorn==0.15.0
 jupyter
 matplotlib
 natasha==1.4
+scipy
+implicit
