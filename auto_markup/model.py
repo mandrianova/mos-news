@@ -111,7 +111,7 @@ def check_function(number_of_news):
     print('REAL SPHERES: \n', [sphere_object['title'] for sphere_object in news[number_of_news]['spheres']])
 
 
-def update_model_func():
+def update_auto_markup_model():
     try:
         save_all_files()
         return True

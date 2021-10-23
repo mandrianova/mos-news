@@ -1,36 +1,31 @@
 import os
-import json
 from fastapi import APIRouter
-from .schemas import TheNewsOut
-from .managers import get_recommendations
+from .schemas import RecommendationAndHistoryOut, NewsItem
+from .managers import get_history, get_recommendations
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 recommendations = APIRouter(prefix='/recommendations', tags=["recommendations"])
 
 
-@recommendations.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-# TODO: поразмышлять на тему роутов / подчеркивание или слэш
-@recommendations.get("/history_news/{id}", response_model=TheNewsOut, tags=["history"])
-def show_history(id: int):
-    """test route to get history news from news.json accessed by index"""
-    with open(os.path.join(BASE_DIR, "news.json"), "r") as file:
-        data = json.load(file)
-    response = data[id]
-    return response
-
-
-@recommendations.post("/{user_id}")
+@recommendations.get("/{user_id}", response_model=RecommendationAndHistoryOut, summary="Get recommendation and history")
 def generate_recommendations(user_id: int):
-    recommendations = get_recommendations(user_id)
-    return {"recommendations": recommendations}
+    """
+    Generate an recommendations item with all the information:
 
+    **recommendations** - prediction of news views for a given user
+    - **id**: user id
+    - **title**: title of the text
+    - **date**: date publication
 
-@recommendations.post("/news/create", response_model=TheNewsOut)
-def create_new_item(item: TheNewsOut):
-    item_dict = item.dict()
-    return item_dict
+    **history** - news viewing history for this user
+    - **id**: user id
+    - **title**: title of the text
+    - **date**: date publication
+    """
+    recommendations_items = get_recommendations(user_id)
+    history_items = get_history(user_id)
+    return RecommendationAndHistoryOut(
+        recommendation_items=[NewsItem(**news_item) for news_item in recommendations_items],
+        histort_items=[NewsItem(**history_item) for history_item in history_items]
+    )
