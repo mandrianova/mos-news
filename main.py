@@ -12,7 +12,8 @@ from auto_markup.api import auto_markup
 from auto_markup.model import update_auto_markup_model
 from auto_markup.schemas import Job
 from recommendations.api import recommendations
-from recommendations.managers import update_recommendation_model, update_general_rating
+from recommendations.models import generate_cold_start_rating
+from recommendations.managers import update_recommendations_model
 
 app = FastAPI()
 
@@ -80,9 +81,9 @@ async def update_model(model_name: ModelName, background_tasks: BackgroundTasks)
     if model_name == ModelName.auto_markup:
         func = update_auto_markup_model
     elif model_name == ModelName.recommendations:
-        func = update_recommendation_model
+        func = update_recommendations_model
     elif model_name == ModelName.cold_start:
-        func = update_general_rating
+        func = generate_cold_start_rating
     else:
         raise HTTPException(status_code=400, detail="Error start task, check logs")
     background_tasks.add_task(start_update_task_handler, func, new_task.uid)
