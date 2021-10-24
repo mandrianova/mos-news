@@ -1,9 +1,8 @@
 import os
 import json
-import time
+import datetime, time
 import threading
 import pandas as pd
-
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +14,10 @@ path_to_history = os.path.join(BASE_DIR, 'data', 'dataset_news_1.xlsx')
 path_to_news = os.path.join(BASE_DIR, 'data', 'news.json')
 path_to_districts = os.path.join(BASE_DIR, 'data', 'districts.json')
 path_to_combined_data = os.path.join(BASE_DIR, 'data', 'combined_data.json')
-key_fields = ['id', 'created_at', 'published_at', 'status', 'kind', 'title', 'preview_text', 'tags', 'url', 'sphere', 'spheres', 'label', 'area_title', 'district_title']
+path_to_cold_start_rating = os.path.join(BASE_DIR, 'data', 'cold_start_rating.json')
+key_fields = ['id', 'created_at', 'published_at', 'status', 'kind', 'title', 'preview_text', 
+              'tags', 'url', 'sphere', 'spheres', 'label', 'area_title', 'district_title']
+
 
 def combine_data():
     dataset = pd.read_excel(path_to_history)
@@ -29,7 +31,6 @@ def combine_data():
     df_news[['preview_text', 'full_text']] = df_news[['preview_text', 'full_text']].fillna('')
     df_news.preview_text = df_news.apply(lambda c: c.preview if len(c.preview) > 0 else c.preview_text, axis=1)
     df_news.full_text = df_news.apply(lambda c: c.text if len(c.text) > 0 else c.full_text, axis=1)
-
     with open(os.path.join(BASE_DIR, 'data', 'districts.json'), 'r') as file:
         districts = json.load(file)['items']
     distr = pd.DataFrame(districts)
@@ -53,22 +54,32 @@ def combine_data():
     df_fin['days_alive'] = df_fin.time_alive.apply(lambda d: d.days)
     df_fin['hours_alive'] = df_fin.time_alive.apply(lambda d: d.components.hours)
     df_fin.drop(columns=['url']).to_json(path_to_combined_data, orient='records', force_ascii=False)
-    
-    # threading.Timer(WAIT_SECONDS, combine_data).start()
     return df_fin
 
 
-def get_rank(views, days_alive):
-    pass
-
-
-def create_cold_start_rating():
-    df = pd.read_json(path_to_combined_data)
-    df.sort_values(by='hours_alive', inplace=True)
+def generate_cold_start_rating():
+    combined_data_last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(path_to_combined_data))
+    now = datetime.datetime.now()
+    combined_data_days_old = now - combined_data_last_modified
+    if combined_data_days_old.days > 1:
+        df = combine_data()
+    else:
+        df = pd.read_json(path_to_combined_data)
+    df.sort_values(by='time_alive', inplace=True)
     df['n_views'] = df.groupby('news_id')['marker'].cumsum()
-    print(df.n_news)
-
-
+    median_views = df.n_views.median()
+    def get_rank(n_views, days_alive):
+        if days_alive == 0:
+            days_alive += 1
+        if n_views < median_views:
+            n_views = median_views
+        return n_views / days_alive
+    df['rank'] = df.apply(lambda x: get_rank(x.n_views, x.days_alive), axis=1)
+    rating = df[['news_id', 'title', 'published_at', 'n_views', 'days_alive', 'rank']].drop_duplicates(subset='news_id').sort_values(by='rank', ascending=False)
+    rating.rename(columns={'news_id': 'id', 'published_at': 'date'}, inplace=True)
+    rating['date'] = rating.date.apply(lambda d: pd.to_datetime(d).strftime(format='%Y-%m-%d %H:%M'))
+    rating[['id', 'title', 'date']].to_json(path_to_cold_start_rating, orient='records', force_ascii=False)
+    return rating[['id', 'title', 'date']]
 
 # while not ticker.wait(WAIT_SECONDS):
 #     combine_data()
