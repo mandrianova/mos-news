@@ -1,7 +1,8 @@
 import os
 import json
 
-from recommendations.cold_rec import generate_cold_start_rating
+from recommendations.cold_rec import get_cold_recommendations
+from recommendations.rec import retrain_recommend_model, generate_recommendations
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_to_cold_start_rating = os.path.join(BASE_DIR, 'data', 'cold_start_rating.json')
@@ -18,17 +19,14 @@ def get_history(user_id: int):
 
 
 def update_recommendations_model():
-    pass
+    retrain_recommend_model()
 
 
-def get_recommendations(user_id: int, new_user: bool):
-    if new_user == True:
-        if os.path.isfile(path_to_cold_start_rating):
-            with open(path_to_cold_start_rating, 'r') as file:
-                recommendations = json.load(file)[:20]
-            print(recommendations)
-        else:
-            recommendations = generate_cold_start_rating()
-    else:
-        recommendations = []
+def get_recommendations_handler(user_id: int):
+    recommendations = generate_recommendations(user_id)
     return recommendations
+
+
+def get_cold_recommendations_handler():
+    cold_recommendations = get_cold_recommendations()
+    return cold_recommendations
