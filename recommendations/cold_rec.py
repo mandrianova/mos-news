@@ -86,7 +86,7 @@ def update_cold_recommendations():
             'date': row['date'],
         }
         lst_of_cold_recommendations.append(obj)
-        if n >= 10:
+        if n >= 20:
             break
 
     with open(path_to_cold_recommendations, 'wb') as f:
