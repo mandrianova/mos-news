@@ -1,9 +1,11 @@
 import os
 import json
-from .models import combine_data, generate_cold_start_rating
+
+from recommendations.cold_rec import generate_cold_start_rating
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_to_cold_start_rating = os.path.join(BASE_DIR, 'data', 'cold_start_rating.json')
+
 
 def get_history(user_id: int):
     with open('data/history.json', 'r', encoding='utf-8') as f:
