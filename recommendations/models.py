@@ -20,6 +20,10 @@ key_fields = ['id', 'created_at', 'published_at', 'status', 'kind', 'title', 'pr
 
 
 def combine_data():
+    """
+    функция для формирования общего массива данных, который объединяет информацию по кол-ву просмотров новостей,
+    развёрнутую информацю о самой новости, а также инф-ю о районе и административном округе.
+    """
     dataset = pd.read_excel(path_to_history)
     dataset['news_id'] = [int(str(i[-1]).strip()) for i in dataset.url_clean.str.findall(r"(\d{4,})")]
     dataset.news_id.fillna(0, inplace=True)
@@ -58,13 +62,18 @@ def combine_data():
 
 
 def generate_cold_start_rating():
+    """
+    функция для формирования актуального рейтинга новостей для новых пользователей. 
+    """
     combined_data_last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(path_to_combined_data))
     now = datetime.datetime.now()
     combined_data_days_old = now - combined_data_last_modified
-    if combined_data_days_old.days > 1:
-        df = combine_data()
-    else:
-        df = pd.read_json(path_to_combined_data)
+    # поскольку история просмотров не накапливается, то проверку на актуальность данных отключаем
+    # if combined_data_days_old.days > 1:
+    #     df = combine_data()
+    # else:
+    #     df = pd.read_json(path_to_combined_data)
+    df = pd.read_json(path_to_combined_data)
     df.sort_values(by='time_alive', inplace=True)
     df['n_views'] = df.groupby('news_id')['marker'].cumsum()
     median_views = df.n_views.median()

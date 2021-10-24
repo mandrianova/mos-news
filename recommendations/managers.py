@@ -6,6 +6,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_to_cold_start_rating = os.path.join(BASE_DIR, 'data', 'cold_start_rating.json')
 
 def get_history(user_id: int):
+    """
+    функция для получения истории просмотров конкретного пользователя. 
+    информация по всем пользователям хранится в отдельном json файле и обновляется по запросу 
+    администратора отдельным скриптом save_history.py.
+    """
     with open('data/history.json', 'r', encoding='utf-8') as f:
         history = json.load(f)
         try:
@@ -20,6 +25,11 @@ def update_recommendations_model():
 
 
 def get_recommendations(user_id: int, new_user: bool):
+    """
+    Функция для получения рекомендаций. алгоритм отличается для новых или уже известных пользователей.
+    Для новых пользователей рейтинг формируется исходя из популярности (кол-во просмотров) / актуальность (кол-во дней).
+    Для текущих пользователей применяется алгоритм ItemItemRecommender. 
+    """
     if new_user == True:
         if os.path.isfile(path_to_cold_start_rating):
             with open(path_to_cold_start_rating, 'r') as file:
