@@ -6,12 +6,13 @@ from typing import Dict
 from uuid import UUID
 from starlette.background import BackgroundTasks
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 from starlette.middleware.cors import CORSMiddleware
 from auto_markup.api import auto_markup
 from auto_markup.model import update_auto_markup_model
 from auto_markup.schemas import Job
 from recommendations.api import recommendations
-from recommendations.managers import update_recommendation_model
+from recommendations.managers import update_recommendation_model, update_general_rating
 
 app = FastAPI()
 
@@ -58,6 +59,7 @@ async def status_task(uid: UUID):
 class ModelName(Enum):
     auto_markup = 'auto_markup'
     recommendations = 'recommendations'
+    cold_start = 'cold_start'
 
 
 @app.post("/update_models", status_code=HTTPStatus.ACCEPTED, tags=["task"])
@@ -79,6 +81,8 @@ async def update_model(model_name: ModelName, background_tasks: BackgroundTasks)
         func = update_auto_markup_model
     elif model_name == ModelName.recommendations:
         func = update_recommendation_model
+    elif model_name == ModelName.cold_start:
+        func = update_general_rating
     else:
         raise HTTPException(status_code=400, detail="Error start task, check logs")
     background_tasks.add_task(start_update_task_handler, func, new_task.uid)
@@ -98,3 +102,8 @@ async def start_update_task_handler(func, uid: UUID) -> None:
 async def run_in_process(func, *args):
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(app.state.executor, func, *args)
+
+
+@app.get("/", tags=["home"])
+async def redirect():
+    return RedirectResponse("/docs")
