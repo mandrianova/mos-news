@@ -58,7 +58,7 @@ result_task3.csv для проверки результатов модели
 
 ##### Вариант с созданием виртуального окружения
 1. Шаг первый - после создания и активации виртуального окружения установите все необходимые зависимости с помощью:
-    ```pip install -r requirements.txt```
+    >>> pip install -r requirements.txt
     если возникли вопросы, то загляните на [этот сайт](https://realpython.com/python-virtual-environments-a-primer/)
 2. Шаг второй - запустите сервер сервер:
     ```uvicorn main:app --reload```
