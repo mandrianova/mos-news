@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter
 from .schemas import RecommendationAndHistoryOut, NewsItem
-from .managers import get_history, get_recommendations
+from .managers import get_history, get_recommendations_handler, get_cold_recommendations_handler
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +25,10 @@ def generate_recommendations(user_id: int):
     """
     history_items = get_history(user_id)
     new_user = True if history_items == [] else False
-    recommendations_items = get_recommendations(user_id, new_user = new_user)
+    if new_user:
+        recommendations_items = get_cold_recommendations_handler()
+    else:
+        recommendations_items = get_recommendations_handler(user_id)
     return RecommendationAndHistoryOut(
         recommendations=[NewsItem(**news_item) for news_item in recommendations_items],
         history=[NewsItem(**history_item) for history_item in history_items]

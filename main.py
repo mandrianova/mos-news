@@ -12,7 +12,7 @@ from auto_markup.api import auto_markup
 from auto_markup.model import update_auto_markup_model
 from auto_markup.schemas import Job
 from recommendations.api import recommendations
-from recommendations.models import generate_cold_start_rating
+from recommendations.cold_rec import update_cold_recommendations
 from recommendations.managers import update_recommendations_model
 
 app = FastAPI()
@@ -60,7 +60,7 @@ async def status_task(uid: UUID):
 class ModelName(Enum):
     auto_markup = 'auto_markup'
     recommendations = 'recommendations'
-    cold_start = 'cold_start'
+    cold_recommendations = 'cold_recommendations'
 
 
 @app.post("/update_models", status_code=HTTPStatus.ACCEPTED, tags=["task"])
@@ -82,8 +82,8 @@ async def update_model(model_name: ModelName, background_tasks: BackgroundTasks)
         func = update_auto_markup_model
     elif model_name == ModelName.recommendations:
         func = update_recommendations_model
-    elif model_name == ModelName.cold_start:
-        func = generate_cold_start_rating
+    elif model_name == ModelName.cold_recommendations:
+        func = update_cold_recommendations
     else:
         raise HTTPException(status_code=400, detail="Error start task, check logs")
     background_tasks.add_task(start_update_task_handler, func, new_task.uid)
