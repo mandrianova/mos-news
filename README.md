@@ -8,6 +8,8 @@
 
 [Демонстрационный стенд](http://217.28.231.202/docs#/)
 
+[Сопроводительная документация](/Documentation.pdf)
+
 - [result_task10.csv](/develop/result_task10.csv) для проверки результатов модели
 - [метод для получения рекомендаций http://217.28.231.202/recommendations/id](http://217.28.231.202/recommendations/1)
 
