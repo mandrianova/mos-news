@@ -1,7 +1,8 @@
 import json
 import pandas as pd
+import os
 
-with open('data/news.json', "r", encoding="utf_8_sig") as news_json:
+with open(os.path.join('data', 'news.json'), "r", encoding="utf_8_sig") as news_json:
     data = json.loads(news_json.read())
 
 news_types = set()
@@ -16,7 +17,7 @@ print(news_types)
 какие вообще нам выдали типы, так как есть еще другие.
 """
 
-df = pd.read_excel('data/dataset_news_1.xlsx')
+df = pd.read_excel(os.path.join('data', 'dataset_news_1.xlsx'))
 
 
 def get_news_id_from_url(url: str) -> int:
@@ -64,7 +65,7 @@ for index, row in df_merge.iterrows():
     user_id = row['user_id']
     news_id = row['news_id']
     title = row['title']
-    date = str(row['date_time'])
+    date = row['date_time'].strftime(format="%Y-%m-%d %H:%M")
     if user_id not in result:
         result[user_id] = [{
             'id': news_id,
@@ -78,7 +79,7 @@ for index, row in df_merge.iterrows():
             'date': date
         })
 
-with open('data/history.json', 'w', encoding='utf-8') as f:
+with open(os.path.join('data', 'history.json'), 'w', encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False,  indent=4)
 
 

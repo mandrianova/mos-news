@@ -6,9 +6,9 @@ from pydantic import BaseModel
 class NewsItem(BaseModel):
     id: int
     title: str
-    date: datetime
+    date: str
 
 
 class RecommendationAndHistoryOut(BaseModel):
-    recommendation_items: Optional[List[NewsItem]]
-    histort_items: Optional[List[NewsItem]]
+    recommendations: Optional[List[NewsItem]]
+    history: Optional[List[NewsItem]]
