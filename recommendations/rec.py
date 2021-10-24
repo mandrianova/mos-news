@@ -153,3 +153,23 @@ def generate_recommendations(user_id):
         recs_list.append(recommended_news)
 
     return recs_list
+
+
+def generate_csv_file():
+    with open(source_to_csr_matrix, 'rb') as f:
+        sparse_user_item = pickle.load(f)
+    with open(source_to_model, 'rb') as f:
+        model = pickle.load(f)
+    with open(source_to_user_ids, 'rb') as f:
+        user_ids = pickle.load(f)
+    with open(source_to_news_ids, 'rb') as f:
+        news_ids = pickle.load(f)
+
+    recs_list = []
+    for user_id in user_ids:
+        rec = recommend_user(user_id, model, sparse_user_item, user_ids, news_ids)[:5]
+        new_lst = [user_id, *rec]
+        recs_list.append(new_lst)
+        df = pd.DataFrame(data=recs_list,
+                          columns=['user_id', 'news_id_1', 'news_id_2', 'news_id_3', 'news_id_4', 'news_id_5'])
+        df.to_csv('result_task10.csv', index=False)
