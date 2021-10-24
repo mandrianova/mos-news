@@ -11,8 +11,7 @@
 
 ###### Ограничения по работе модели:
 1. Скорость работы модели < 1 сек.
-2. Переобучение модели - не реже 1 раза в день, сокращение времени будет
-рассматриваться, как дополнительное преимущество.
+2. Переобучение модели - не реже 1 раза в день, сокращение времени будет рассматриваться, как дополнительное преимущество.
 
 ###### Формат передачи данных:
 
@@ -43,8 +42,8 @@ result_task3.csv для проверки результатов модели
 
 ### Стек:
 ##### Web:
-- FastAPI (https://github.com/tiangolo/fastapi)
-- pydantic (https://github.com/samuelcolvin/pydantic/)
+- [FastAPI](https://github.com/tiangolo/fastapi "современный, шустрый веб-фреймворк для строительства API c помощью Python => 3.6")
+- [pydantic](https://github.com/samuelcolvin/pydantic "валидация данных и настройки с применением встроенных аннотаций типов Python")
 - Uvicorn (https://github.com/encode/uvicorn)
 ##### Auto-markup:
 - nltk (https://github.com/nltk/nltk)
