@@ -3,26 +3,34 @@ import pymorphy2
 import urllib.request
 import json
 import pickle
+import sys
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, BASE_DIR)
 
 from auto_markup.support_for_model.support_decorators import measure_exectime, try_except_none_wrapper
 from auto_markup.support_for_model.text_manipulation import get_text_on_pattern_replacement_func, \
     get_lst_of_normalized_tokens_without_stopwords
 
+
 morph = pymorphy2.MorphAnalyzer()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 path_to_data_folder = os.path.join(BASE_DIR, 'data')
+path_to_automarkup_data = os.path.join(path_to_data_folder, 'data_auto_markup')
+
+if not os.path.exists(path_to_automarkup_data):
+    os.makedirs(path_to_automarkup_data)    
 
 source_xlsx = os.path.join(path_to_data_folder, 'dataset_news_1.xlsx')
 source_json = os.path.join(path_to_data_folder, 'news.json')
 source_districts_json = os.path.join(path_to_data_folder, 'districts.json')
-source_corpus = os.path.join(path_to_data_folder, 'data_auto_markup', 'corpus.pickle')
-source_set_of_tags = os.path.join(path_to_data_folder, 'data_auto_markup', 'tags.pickle')
-source_normalized_set_of_tags = os.path.join(path_to_data_folder, 'data_auto_markup', 'normalized_tags.pickle')
-source_set_of_spheres = os.path.join(path_to_data_folder, 'data_auto_markup', 'set_of_spheres.pickle')
-source_normalized_set_of_spheres = os.path.join(path_to_data_folder, 'data_auto_markup',
+source_corpus = os.path.join(path_to_automarkup_data, 'corpus.pickle')
+source_set_of_tags = os.path.join(path_to_automarkup_data, 'tags.pickle')
+source_normalized_set_of_tags = os.path.join(path_to_automarkup_data, 'normalized_tags.pickle')
+source_set_of_spheres = os.path.join(path_to_automarkup_data, 'set_of_spheres.pickle')
+source_normalized_set_of_spheres = os.path.join(path_to_automarkup_data,
                                                 'normalized_set_of_spheres.pickle')
-source_dict_normalized_tag_spheres = os.path.join(path_to_data_folder, 'data_auto_markup',
+source_dict_normalized_tag_spheres = os.path.join(path_to_automarkup_data,
                                                   'dict_normalized_tag_spheres.pickle')
 
 
