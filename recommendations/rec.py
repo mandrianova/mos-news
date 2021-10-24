@@ -7,6 +7,7 @@ import json
 import datetime
 from scipy.sparse import csr_matrix, coo_matrix
 from implicit.nearest_neighbours import ItemItemRecommender
+
 pd.set_option('display.max_columns', None)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +35,6 @@ def retrain_recommend_model():
 
     df = pd.read_excel(source_xlsx)
 
-
     def get_news_id_from_url(url: str) -> int:
         parts = url.split('/')
         try:
@@ -49,7 +49,6 @@ def retrain_recommend_model():
             print("it is not news url ", url)
             return 0
 
-
     def get_news_type(news_id: int) -> str:
         if str(news_id)[-3:] == '073':
             return "news"
@@ -59,17 +58,14 @@ def retrain_recommend_model():
             print(news_id)
             return "error"
 
-
     df['news_id'] = df['url_clean'].apply(get_news_id_from_url)
     df['news_type'] = df['news_id'].apply(get_news_type)
 
     df['news_type'].value_counts()
 
-
     df_json = pd.read_json(source_json, encoding="utf_8_sig")  # Закинем json в df
     df_json["news_type"] = df_json['id'].apply(get_news_type)
     df_json["news_type"].value_counts()
-
 
     merged = df.merge(df_json,
                       left_on='news_id',
@@ -79,18 +75,14 @@ def retrain_recommend_model():
     days = show_difference.dt.days
     merged['published/read'] = days
 
-
-
     final_df = merged.drop(['importance', 'is_deferred_publication', 'status', 'ya_rss', 'active_from',
                             'active_to', 'search', 'display_image', 'icon_id', 'canonical_url', 'canonical_updated_at',
                             'is_powered', 'has_image', 'attach', 'active_from_timestamp', 'active_to_timestamp',
                             'image', 'counter', 'preview_text', 'images'],
                            axis=1)
-
     final_df['sphere_id'] = final_df.sphere.map(lambda row: row.get('id'))
     final_df['title_age'] = (pd.Timestamp.now() - final_df['published_at']).dt.days
     final_df['age_param'] = (1 / final_df['title_age']) * 10000
-    users, items, interactions = final_df.user_id.nunique(), final_df.id.nunique(), final_df.shape[0]
     final_df['date_time'].dt.day.min()
     final_df = final_df[['user_id', 'news_id', 'date_time', 'age_param', 'title', 'published_at']]
 
@@ -119,7 +111,6 @@ def retrain_recommend_model():
     model.fit(csr_matrix(user_item_matrix).T,
               show_progress=True)
 
-
     user_ids = list(user_item_matrix.index.values)
     news_ids = list(user_item_matrix.columns.values)
 
@@ -134,12 +125,6 @@ def retrain_recommend_model():
     with open(source_to_csr_matrix, 'wb') as f:
         pickle.dump(sparse_user_item, f)
 
-# source_to_model = os.path.join(source_data_recom_dir, 'model.pickle')
-# source_to_final_df = os.path.join(source_data_recom_dir, 'final_df.pickle')
-# source_to_user_ids = os.path.join(source_data_recom_dir, 'user_ids.pickle')
-# source_to_news_ids = os.path.join(source_data_recom_dir, 'news_ids.pickle')
-# source_to_csr_matrix = os.path.join(source_data_recom_dir, 'csr_matrix.pickle')
-
 
 def recommend_user(user_id, model, sparse_user_item, user_ids, news_ids):
     user_index = user_ids.index(user_id)
@@ -149,7 +134,7 @@ def recommend_user(user_id, model, sparse_user_item, user_ids, news_ids):
     return result
 
 
-def json_recs(user_id):
+def generate_recommendations(user_id):
     with open(source_to_csr_matrix, 'rb') as f:
         sparse_user_item = pickle.load(f)
     with open(source_to_model, 'rb') as f:
@@ -163,8 +148,8 @@ def json_recs(user_id):
     recs_list = []
     for news_id in recommend_user(user_id, model, sparse_user_item, user_ids, news_ids):
         recommended_news = {'id': news_id,
-                            'title': list(df.loc[(df['news_id'] == news_id)]['title'])[0],
-                            'date': list(df.loc[(df['news_id'] == news_id)]['published_at'])[0]}
+                            'title': str(list(df.loc[(df['news_id'] == news_id)]['title'])[0]),
+                            'date': str(list(df.loc[(df['news_id'] == news_id)]['published_at'])[0])}
         recs_list.append(recommended_news)
 
     return recs_list
