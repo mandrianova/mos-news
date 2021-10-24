@@ -42,36 +42,38 @@ result_task3.csv для проверки результатов модели
 
 ### Стек:
 ##### Web:
-- [FastAPI](https://github.com/tiangolo/fastapi "современный, шустрый веб-фреймворк для строительства API c помощью Python => 3.6")
-- [pydantic](https://github.com/samuelcolvin/pydantic "валидация данных и настройки с применением встроенных аннотаций типов Python")
-- Uvicorn (https://github.com/encode/uvicorn)
+- [FastAPI](https://github.com/tiangolo/fastapi "современный, шустрый веб-фреймворк для строительства крутых API c помощью Python => 3.6")
+- [Pydantic](https://github.com/samuelcolvin/pydantic "валидация данных и настройки с применением встроенных аннотаций типов Python")
+- [Uvicorn](https://github.com/encode/uvicorn "лёгкий и стремительный ASGI-сервер")
 ##### Auto-markup:
-- nltk (https://github.com/nltk/nltk)
-- pymorphy2 (https://github.com/kmike/pymorphy2/blob/92d546f042ff14601376d3646242908d5ab786c1/docs/index.rst)
-- natasha (https://github.com/natasha/natasha)
+- [nltk](https://github.com/nltk/nltk "набор инструментов для обработки текста NLTK -- the Natural Language Toolkit")
+- [pymorphy2](https://github.com/kmike/pymorphy2/blob/92d546f042ff14601376d3646242908d5ab786c1/docs/index.rst "Морфологический анализатор pymorphy2 -> приводит слова к нормальной форме, а также многое другое")
+- [natasha](https://github.com/natasha/natasha "библиотека для обработки текстов на русском языке")
 ##### Recommendations:
-- implicit, модель ItemItemRecommender 
-(https://github.com/benfred/implicit/blob/main/docs/quickstart.rst,
- https://github.com/benfred/implicit/blob/main/implicit/nearest_neighbours.py#L12)
+- [implicit](https://github.com/benfred/implicit/blob/main/docs/quickstart.rst)
+- [модель ItemItemRecommender](https://github.com/benfred/implicit/blob/main/implicit/nearest_neighbours.py#L12)
 
 ### Деплой и нюансы
 #### Руководство по запуску
 
-1. Шаг первый - установить все пакеты:
+##### Вариант с созданием виртуального окружения
+1. Шаг первый - после создания и активации виртуального окружения установите все необходимые зависимости с помощью:
     ```pip install -r requirements.txt```
-2. Шаг второй - поднять сервер:
+    если возникли вопросы, то загляните на [этот сайт](https://realpython.com/python-virtual-environments-a-primer/)
+2. Шаг второй - запустите сервер сервер:
     ```uvicorn main:app --reload```
-3. Proceed to http://127.0.0.1:8000/
-4. Run task update model and choose "auto_markup" to generate required files. This task needs some time (~10 min). So, relax and don't hurry!
-5. Now push get / post
-6. Repeat
-7. Good evening
+    убедитесь, что у вас активировано виртуальное окружение.
+3. Откройте браузер и проследуйте http://127.0.0.1:8000/
+4. Все модели сразу должны быть готовы к использованию... Тем не менее, если вы запускаете проект спустя несколько суток после 2021-10-24 00:00, то возможно, потребуется обновить некоторые зависимости с помощью отдельный роутов(update models: auto_markup, recommendations, cold_start). На создание всех необходимых файлов может уйти вплоть до 10 минут. Не спешите!
+5. Вы готовы тестировать функционал! Смело жмите push / get
+6. Повторите
+7. Добрый вечер
 
-#### Запуск с docker-compose
+##### Вариант запуска с помощью [docker](https://www.docker.com "популярный контейнизатор")
 
 - Команда для jupyter:
-```docker-compose up jupyter``` 
-Use host and port http://127.0.0.1:8089/
+```docker-compose up jupyter```
+с целью минимизации каких-либо конфликтов доступ через альтернативный порт http://127.0.0.1:8089/
 - Команда для web-service:
 ```docker-compose up web```
-Use host and port http://127.0.0.1:8090/
+аналогичная ситуация с веб-сервером, обратите внимание на альтернативный порт http://127.0.0.1:8090/
