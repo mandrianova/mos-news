@@ -51,7 +51,8 @@ def combine_data():
     df_fin['marker'] = [1 for i in range(df_fin.shape[0])]
     df_fin['time_alive'] = df_fin.date_time - df_fin.published_at
     df_fin['days_alive'] = df_fin.time_alive.apply(lambda d: d.days)
-    df_fin['hours_alive'] = df_fin.time_alive.apply(lambda d: d.components.hours)
+    df_fin['hours_alive'] = df_fin.time_alive.astype("timedelta64[s]") / 60
+    df_fin['hours_alive'] = df_fin.hours_alive.round(1)
     # df_fin.drop(columns=['url']).to_json(path_to_combined_data, orient='records', force_ascii=False)
     return df_fin
 
@@ -70,8 +71,10 @@ def update_cold_recommendations():
         return n_views / days_alive
 
     df['rank'] = df.apply(lambda x: get_rank(x.n_views, x.days_alive), axis=1)
-    rating = df[['news_id', 'title', 'published_at', 'n_views', 'days_alive', 'rank']].drop_duplicates(
-        subset='news_id').sort_values(by='rank', ascending=False)
+    rating = (df[['news_id', 'title', 'published_at', 'n_views', 'days_alive', 'rank']]
+                .sort_values(by='rank', ascending=False)
+                .drop_duplicates(subset='news_id')
+    )
     rating.rename(columns={'news_id': 'id', 'published_at': 'date'}, inplace=True)
     rating['date'] = rating.date.apply(lambda d: pd.to_datetime(d).strftime(format='%Y-%m-%d %H:%M'))
 
