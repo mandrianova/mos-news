@@ -22,3 +22,8 @@ class Job(BaseModel):
     uid: UUID = Field(default_factory=uuid4)
     status: str = "in_progress"
     exception: str = None
+
+
+class TheFullNews(TheNews, MarkUp):
+    based_tags: Optional[List[str]]
+    based_spheres: Optional[List[str]]
