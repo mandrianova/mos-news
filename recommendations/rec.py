@@ -4,9 +4,9 @@ import pickle
 import pandas as pd
 import numpy as np
 import json
-import datetime
-from scipy.sparse import csr_matrix, coo_matrix
+from scipy.sparse import csr_matrix
 from implicit.nearest_neighbours import ItemItemRecommender
+
 
 pd.set_option('display.max_columns', None)
 
@@ -81,8 +81,8 @@ def retrain_recommend_model():
                             'image', 'counter', 'preview_text', 'images'],
                            axis=1)
     final_df['sphere_id'] = final_df.sphere.map(lambda row: row.get('id'))
-    final_df['title_age'] = (pd.Timestamp.now() - final_df['published_at']).dt.days
-    final_df['age_param'] = (1 / final_df['title_age']) * 10000
+    final_df['title_age'] = (final_df['published_at'].max() - final_df['published_at']).dt.days + 1
+    final_df['age_param'] = 1 / final_df['title_age']
     final_df['date_time'].dt.day.min()
     final_df = final_df[['user_id', 'news_id', 'date_time', 'age_param', 'title', 'published_at']]
 
@@ -103,13 +103,12 @@ def retrain_recommend_model():
 
     user_item_matrix = user_item_matrix.astype(float)
 
-    sparse_user_item = csr_matrix(user_item_matrix).T.tocsr()
+    sparse_user_item = csr_matrix(user_item_matrix).T
 
     user_item_matrix.head(5)
 
-    model = ItemItemRecommender(K=20, num_threads=4)
-    model.fit(csr_matrix(user_item_matrix).T,
-              show_progress=True)
+    model = ItemItemRecommender(K=6)
+    model.fit(sparse_user_item, show_progress=False)
 
     user_ids = list(user_item_matrix.index.values)
     news_ids = list(user_item_matrix.columns.values)
