@@ -24,6 +24,6 @@ class Job(BaseModel):
     exception: str = None
 
 
-class TheFullNews(TheNews, MarkUp):
+class TheFullNews(MarkUp, TheNews):
     based_tags: Optional[List[str]]
     based_spheres: Optional[List[str]]
