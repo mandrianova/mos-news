@@ -11,6 +11,8 @@ COPY package-lock.json .
 RUN npm install
 COPY . .
 RUN export NODE_OPTIONS=--openssl-legacy-provider
+RUN npm config set user 0
+RUN npm config set unsafe-perm true
 RUN npm run build
 EXPOSE 8080
 CMD [ "npx", "http-server", "dist" ]
