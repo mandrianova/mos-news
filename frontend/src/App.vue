@@ -1,12 +1,16 @@
 <template>
   <v-app>
-    <router-view />
+<!--    <router-view />-->
+    <rec-input />
   </v-app>
 </template>
 
 <script>
+import RecInput from '@/components/RecInput'
+
 export default {
-  components: { 
+  components: {
+    RecInput
     // Recommendations,
     // Markup, 
     // Documentation,
