@@ -107,7 +107,7 @@ def retrain_recommend_model():
 
     user_item_matrix.head(5)
 
-    model = ItemItemRecommender(K=6)
+    model = ItemItemRecommender(K=25)
     model.fit(sparse_user_item, show_progress=False)
 
     user_ids = list(user_item_matrix.index.values)
