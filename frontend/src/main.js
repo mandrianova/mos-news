@@ -8,7 +8,7 @@ import vuetify from './plugins/vuetify';
 Vue.config.productionTip = false;
 
 axios.defaults.withCredentials = false;
-axios.defaults.baseURL = 'http://localhost:80/';  // the FastAPI backend
+axios.defaults.baseURL = 'http://217.28.231.202/';  // the FastAPI backend
 
 new Vue({
   router,
