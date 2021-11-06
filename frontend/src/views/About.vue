@@ -3,14 +3,12 @@
   <top-bar />
   <div>
   <v-container class="grey lighten-5 m-5 p-lg-5" style="height: 1000px;">
-    <div>
     <v-row class="justify-content-center m-lg-5">
       <template v-for="z in zonderTeam">
           <v-card
             :key="z.id"
             class="mx-auto"
             width="260"
-
             outlined
             tile
           >
@@ -61,7 +59,6 @@
 
           </template>
       </v-row>
-      </div>
     </v-container>
     </div>
   </div>
@@ -97,7 +94,7 @@ export default {
           },
           {
             id: 3,
-            fullName: "Indiko Djalagonia",
+            fullName: "Indiko Dzhalagonia",
             role: "Data Scientist",
             tel: "+7 (999) 989-26-85",
             img: "../assets/nick.png",            

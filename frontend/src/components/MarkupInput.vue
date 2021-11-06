@@ -1,8 +1,8 @@
 <template>
 	<v-main class="grey lighten-3">
 		<v-container>
-			<v-row>
-				<v-col md="10">
+			<v-row class="justify-center">
+				<v-col md="6">
 					<v-sheet min-height="80vh" rounded="lg">
 						<v-navigation-drawer right absolute>
 							<v-container>
@@ -29,29 +29,29 @@
 								</div>
 							</v-container>
 						</v-navigation-drawer>
-						<v-container class="justify-start" id="main">
+						<v-container id="main">
 							<v-row>
-               <v-col md=6 class="justify-start align-start">
-									<h5> tags </h5>
-									<ul>
-										<li
+							<v-col md=6>
+									<h5 class="text-left">TAGS</h5>
+									<v-list dense>
+										<v-list-item
 											v-for="tag in tags"
 											:key="tag"
 										>
 											{{ tag }}
-										</li>
-									</ul>
-							</v-col>
-							<v-col md=6>
-									<h5> spheres </h5>
-									<ul>
-										<li
+										</v-list-item>
+										</v-list>
+								</v-col>
+								<v-col md=6>
+									<h5 class="text-left">SPHERES</h5>
+									<v-list dense>
+										<v-list-item
 											v-for="sphere in spheres"
 											:key="sphere"
 										>
 											{{ sphere }}
-										</li>
-									</ul>
+										</v-list-item>
+										</v-list>
 								</v-col>
 							</v-row>
 						</v-container>
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style>
-.v-col {
+.v-list {
 	font-family: monospace;
 	font-weight: 300;
 }
