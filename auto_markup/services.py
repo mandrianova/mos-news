@@ -28,8 +28,8 @@ def get_one_news_from_mos_api(news_id: int):
         data['spheres'] = [sphere['title'] for sphere in request_dict['spheres']]
         if type_of_news == '050':
             data['title'] = get_text_on_pattern_replacement_func(request_dict['title'])
-            data['preview'] = get_text_on_pattern_replacement_func(request_dict['preview'])
-            data['text'] = get_text_on_pattern_replacement_func(request_dict['text'])
+            data['preview_text'] = get_text_on_pattern_replacement_func(request_dict['preview'])
+            data['full_text'] = get_text_on_pattern_replacement_func(request_dict['text'])
         elif type_of_news == '073':
             data['title'] = get_text_on_pattern_replacement_func(request_dict['title'])
             data['preview_text'] = get_text_on_pattern_replacement_func(request_dict['preview_text'])
