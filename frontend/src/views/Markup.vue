@@ -1,7 +1,7 @@
 <template>
   <div class="markup">
-      <top-bar></top-bar>
-      <markup-input></markup-input>
+      <top-bar/>
+      <markup-input/>
   </div>
 </template>
 

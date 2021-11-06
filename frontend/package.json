@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.1.0",
     "core-js": "^3.19.1",
+    "http-server": "^14.0.0",
     "regenerator-runtime": "^0.13.9",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
